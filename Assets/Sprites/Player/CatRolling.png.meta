@@ -1,5 +1,5 @@
 fileFormatVersion: 2
-guid: c7b97170e2fd2e04c97c0f24769c6760
+guid: d136daab8c9b35342bb2f28365ee48bc
 TextureImporter:
   internalIDToNameTable:
   - first:
@@ -146,7 +146,7 @@ TextureImporter:
     serializedVersion: 2
     sprites:
     - serializedVersion: 2
-      name: Catrooling_0
+      name: CatRolling_0
       rect:
         serializedVersion: 2
         x: 0
@@ -161,14 +161,14 @@ TextureImporter:
       physicsShape: []
       tessellationDetail: 0
       bones: []
-      spriteID: 33b91cfa6618e0145804f5aba826e0d2
-      internalID: 2029495762
+      spriteID: b0f79907f7620e64b911e9d15de2bea0
+      internalID: 835153530
       vertices: []
       indices: 
       edges: []
       weights: []
     - serializedVersion: 2
-      name: Catrooling_1
+      name: CatRolling_1
       rect:
         serializedVersion: 2
         x: 192
@@ -183,14 +183,14 @@ TextureImporter:
       physicsShape: []
       tessellationDetail: 0
       bones: []
-      spriteID: ec8678dd9855a4f48810322c23569e65
-      internalID: -1364833267
+      spriteID: 55a30ef6251c478478c3fc5325015d84
+      internalID: 2121744242
       vertices: []
       indices: 
       edges: []
       weights: []
     - serializedVersion: 2
-      name: Catrooling_2
+      name: CatRolling_2
       rect:
         serializedVersion: 2
         x: 384
@@ -205,14 +205,14 @@ TextureImporter:
       physicsShape: []
       tessellationDetail: 0
       bones: []
-      spriteID: c4de9f6a8afdc6443ae1ac4c74529375
-      internalID: -1557237412
+      spriteID: 23d3d466fe15c16479773eb19840a253
+      internalID: -38066377
       vertices: []
       indices: 
       edges: []
       weights: []
     - serializedVersion: 2
-      name: Catrooling_3
+      name: CatRolling_3
       rect:
         serializedVersion: 2
         x: 576
@@ -227,14 +227,14 @@ TextureImporter:
       physicsShape: []
       tessellationDetail: 0
       bones: []
-      spriteID: 443d0d512706ea74dbff494cc6f77814
-      internalID: 1465928123
+      spriteID: 1da6771abe4841e41833f59b1d85ea55
+      internalID: -42539102
       vertices: []
       indices: 
       edges: []
       weights: []
     - serializedVersion: 2
-      name: Catrooling_4
+      name: CatRolling_4
       rect:
         serializedVersion: 2
         x: 768
@@ -249,14 +249,14 @@ TextureImporter:
       physicsShape: []
       tessellationDetail: 0
       bones: []
-      spriteID: 7e1ec85f6821c4a4f82fb6339f8a6d4f
-      internalID: 1836990567
+      spriteID: e293009333686324384d2ac84116cc36
+      internalID: -1462110290
       vertices: []
       indices: 
       edges: []
       weights: []
     - serializedVersion: 2
-      name: Catrooling_5
+      name: CatRolling_5
       rect:
         serializedVersion: 2
         x: 960
@@ -271,14 +271,14 @@ TextureImporter:
       physicsShape: []
       tessellationDetail: 0
       bones: []
-      spriteID: 0cac5dff4d70d9e4f9663cc3d8455bad
-      internalID: 2053250514
+      spriteID: 75c7d671412e1864d8a95eae2bb2c51b
+      internalID: 149544276
       vertices: []
       indices: 
       edges: []
       weights: []
     - serializedVersion: 2
-      name: Catrooling_6
+      name: CatRolling_6
       rect:
         serializedVersion: 2
         x: 1152
@@ -293,14 +293,14 @@ TextureImporter:
       physicsShape: []
       tessellationDetail: 0
       bones: []
-      spriteID: 613d612077f987445bfc93f51deaabfc
-      internalID: -219403983
+      spriteID: efa2a37e64eb440439fd25ef677ce5da
+      internalID: 1727247585
       vertices: []
       indices: 
       edges: []
       weights: []
     - serializedVersion: 2
-      name: Catrooling_7
+      name: CatRolling_7
       rect:
         serializedVersion: 2
         x: 1344
@@ -315,14 +315,14 @@ TextureImporter:
       physicsShape: []
       tessellationDetail: 0
       bones: []
-      spriteID: f71d5b9a6f39c0a4a99f0435fdf7d76e
-      internalID: -1909265728
+      spriteID: b52caa3dbb2d89d498938582b81e6451
+      internalID: -724363982
       vertices: []
       indices: 
       edges: []
       weights: []
     - serializedVersion: 2
-      name: Catrooling_8
+      name: CatRolling_8
       rect:
         serializedVersion: 2
         x: 1536
@@ -337,14 +337,14 @@ TextureImporter:
       physicsShape: []
       tessellationDetail: 0
       bones: []
-      spriteID: 505afa46a3a8c2c408e3ed56d24b5948
-      internalID: 1452753182
+      spriteID: b104c2d7611b7814fba4a25904597c0b
+      internalID: -1508825662
       vertices: []
       indices: 
       edges: []
       weights: []
     - serializedVersion: 2
-      name: Catrooling_9
+      name: CatRolling_9
       rect:
         serializedVersion: 2
         x: 1728
@@ -359,14 +359,14 @@ TextureImporter:
       physicsShape: []
       tessellationDetail: 0
       bones: []
-      spriteID: 18e919b8838527a40a3e1ca2717c7ca6
-      internalID: -300642102
+      spriteID: 43cb67358b0377945b589a5d139e236b
+      internalID: -55614540
       vertices: []
       indices: 
       edges: []
       weights: []
     - serializedVersion: 2
-      name: Catrooling_10
+      name: CatRolling_10
       rect:
         serializedVersion: 2
         x: 1920
@@ -381,14 +381,14 @@ TextureImporter:
       physicsShape: []
       tessellationDetail: 0
       bones: []
-      spriteID: 8692ed7094c72ae4a8e85390d92a8507
-      internalID: -1701392058
+      spriteID: c8ac74f91a8970140bf408bb970af837
+      internalID: 59510124
       vertices: []
       indices: 
       edges: []
       weights: []
     - serializedVersion: 2
-      name: Catrooling_11
+      name: CatRolling_11
       rect:
         serializedVersion: 2
         x: 2112
@@ -403,8 +403,8 @@ TextureImporter:
       physicsShape: []
       tessellationDetail: 0
       bones: []
-      spriteID: 820d80585aa9c874da0f7f37880a996f
-      internalID: 1096687900
+      spriteID: 2519057ccda06c04088c6700836c6bac
+      internalID: -1985165602
       vertices: []
       indices: 
       edges: []
@@ -413,7 +413,7 @@ TextureImporter:
     customData: 
     physicsShape: []
     bones: []
-    spriteID: 876e0628b8057d64c919c1e81a39a448
+    spriteID: e2521dc259b80594f9c6a9400c30221c
     internalID: 0
     vertices: []
     indices: 
@@ -423,18 +423,18 @@ TextureImporter:
     spriteCustomMetadata:
       entries: []
     nameFileIdTable:
-      Catrooling_0: 2029495762
-      Catrooling_1: -1364833267
-      Catrooling_10: -1701392058
-      Catrooling_11: 1096687900
-      Catrooling_2: -1557237412
-      Catrooling_3: 1465928123
-      Catrooling_4: 1836990567
-      Catrooling_5: 2053250514
-      Catrooling_6: -219403983
-      Catrooling_7: -1909265728
-      Catrooling_8: 1452753182
-      Catrooling_9: -300642102
+      CatRolling_0: 835153530
+      CatRolling_1: 2121744242
+      CatRolling_10: 59510124
+      CatRolling_11: -1985165602
+      CatRolling_2: -38066377
+      CatRolling_3: -42539102
+      CatRolling_4: -1462110290
+      CatRolling_5: 149544276
+      CatRolling_6: 1727247585
+      CatRolling_7: -724363982
+      CatRolling_8: -1508825662
+      CatRolling_9: -55614540
   mipmapLimitGroupName: 
   pSDRemoveMatte: 0
   userData: 
