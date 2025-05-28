@@ -37,6 +37,11 @@ public class Player : MonoBehaviour
         animator = GetComponent<Animator>();
         currentLives = maxLives;
     }
+    
+    private bool CanRoll()
+{
+    return !isRolling && IsGrounded();
+}
 
     private void Update()
     {
@@ -61,25 +66,29 @@ public class Player : MonoBehaviour
 
         // ✅ Trigger roll: Down + Left or Right
         // ✅ Handle rolling input: Must be holding Down + Left/Right
-    if (IsGrounded() && Input.GetKey(KeyCode.DownArrow))
-{
-    if (Input.GetKey(KeyCode.RightArrow))
-    {
-        StartRolling(1);
-    }
-    else if (Input.GetKey(KeyCode.LeftArrow))
-    {
-        StartRolling(-1);
-    }
-    else
-    {
-        StopRolling(); // No left/right input while down is held
-    }
-}
-else
-{
-    StopRolling(); // Not holding down key
-}
+        bool downPressed = Input.GetKey(KeyCode.DownArrow);
+        bool leftPressed = Input.GetKey(KeyCode.LeftArrow);
+        bool rightPressed = Input.GetKey(KeyCode.RightArrow);
+
+
+        // Only start rolling if eligible
+        if (CanRoll() && downPressed && (leftPressed || rightPressed))
+        {
+            int direction = rightPressed ? 1 : -1;
+            StartRolling(direction);
+        }
+
+        // Stop rolling when either key is released or roll duration ends
+        if (isRolling)
+        {
+            rollTimer -= Time.deltaTime;
+
+            if (!downPressed || (!leftPressed && !rightPressed) || rollTimer <= 0f)
+            {
+                StopRolling();
+            }
+        }
+
 
 
         if (Input.GetKeyDown(KeyCode.Escape)) Application.Quit();
@@ -130,14 +139,15 @@ else
 
     private void StartRolling(int direction)
 {
-    if (isRolling && rollDirection == direction) return; // Already rolling that way
+    if (isRolling && rollDirection == direction) return;
 
     isRolling = true;
     isAttacking = true;
     rollDirection = direction;
     sr.flipX = direction == -1;
-    animator.SetBool("IsRolling", true); // ✅ Use Bool instead of Trigger
+    animator.SetBool("IsRolling", true);
 }
+
 
 private void StopRolling()
 {
