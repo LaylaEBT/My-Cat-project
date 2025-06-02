@@ -7226,7 +7226,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   maxHealth: 1
   damageAmount: 1
-  speed: 4
+  speed: 3
   groundDetection: {fileID: 2061981032}
   groundDetectionDistance: 1
   groundLayer:
@@ -70118,7 +70118,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 3113867315630344331, guid: 79eeb3e2364f33a49b398626fe515aee, type: 3}
       propertyPath: speed
-      value: 5
+      value: 6
       objectReference: {fileID: 0}
     - target: {fileID: 3113867315630344331, guid: 79eeb3e2364f33a49b398626fe515aee, type: 3}
       propertyPath: maxLives

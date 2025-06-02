@@ -69,25 +69,33 @@ public class Player : MonoBehaviour
         bool downPressed = Input.GetKey(KeyCode.DownArrow);
         bool leftPressed = Input.GetKey(KeyCode.LeftArrow);
         bool rightPressed = Input.GetKey(KeyCode.RightArrow);
+        bool rollInputHeld = downPressed && (leftPressed || rightPressed);
 
 
         // Only start rolling if eligible
-        if (CanRoll() && downPressed && (leftPressed || rightPressed))
-        {
-            int direction = rightPressed ? 1 : -1;
-            StartRolling(direction);
-        }
+        if (CanRoll() && rollInputHeld)
+{
+    int direction = rightPressed ? 1 : -1;
+    StartRolling(direction);
+}
 
-        // Stop rolling when either key is released or roll duration ends
-        if (isRolling)
-        {
-            rollTimer -= Time.deltaTime;
+// Stop rolling if the keys are released or time ran out
+if (isRolling)
+{
+    rollTimer -= Time.deltaTime;
 
-            if (!downPressed || (!leftPressed && !rightPressed) || rollTimer <= 0f)
-            {
-                StopRolling();
-            }
-        }
+    if (!rollInputHeld || rollTimer <= 0f)
+    {
+        StopRolling();
+    }
+
+    // Keep the animator updated every frame while rolling
+    animator.SetBool("IsRolling", true);
+}
+else
+{
+    animator.SetBool("IsRolling", false);
+}
 
 
 
