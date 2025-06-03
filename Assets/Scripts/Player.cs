@@ -33,6 +33,8 @@ public class Player : MonoBehaviour
     private int jumpsRemaining;
     public int maxJumps = 2;
 
+    private bool isClimbing = false;
+
     private void Start()
     {
         rb = GetComponent<Rigidbody2D>();
@@ -47,74 +49,77 @@ public class Player : MonoBehaviour
 }
 
     private void Update()
-    {
-        // ✅ Handle rolling state
-        if (isRolling)
-        {
-            rollTimer -= Time.deltaTime;
-            if (rollTimer <= 0f)
-            {
-                isRolling = false;
-                isAttacking = false;
-            }
-        }
-        else if (isAttacking)
-        {
-            attackTimer -= Time.deltaTime;
-            if (attackTimer <= 0f)
-            {
-                isAttacking = false;
-            }
-        }
-
-        if (IsGrounded() && !isRolling)
-        {
-            jumpsRemaining = maxJumps;
-        }
-
-
-        // ✅ Trigger roll: Down + Left or Right
-        // ✅ Handle rolling input: Must be holding Down + Left/Right
-        bool downPressed = Input.GetKey(KeyCode.DownArrow);
-        bool leftPressed = Input.GetKey(KeyCode.LeftArrow);
-        bool rightPressed = Input.GetKey(KeyCode.RightArrow);
-        bool rollInputHeld = downPressed && (leftPressed || rightPressed);
-
-
-        // Only start rolling if eligible
-        if (CanRoll() && rollInputHeld)
 {
-    int direction = rightPressed ? 1 : -1;
-    StartRolling(direction);
-}
-
-// Stop rolling if the keys are released or time ran out
-if (isRolling)
-{
-    rollTimer -= Time.deltaTime;
-
-    if (!rollInputHeld || rollTimer <= 0f)
+    if (isRolling)
     {
-        StopRolling();
+        rollTimer -= Time.deltaTime;
+        if (rollTimer <= 0f)
+        {
+            isRolling = false;
+            isAttacking = false;
+        }
+    }
+    else if (isAttacking)
+    {
+        attackTimer -= Time.deltaTime;
+        if (attackTimer <= 0f)
+        {
+            isAttacking = false;
+        }
     }
 
-    // Keep the animator updated every frame while rolling
-    animator.SetBool("IsRolling", true);
-}
-else
-{
-    animator.SetBool("IsRolling", false);
-}
+    if (IsGrounded() && !isRolling)
+    {
+        jumpsRemaining = maxJumps;
+    }
 
-   animator.SetBool("IsGrounded", IsGrounded());
-   //animator.SetBool("IsMoving", Mathf.Abs(horizontal) > 0.1f); FALSE
+    // Rolling input
+    bool downPressed = Input.GetKey(KeyCode.DownArrow);
+    bool leftPressed = Input.GetKey(KeyCode.LeftArrow);
+    bool rightPressed = Input.GetKey(KeyCode.RightArrow);
+    bool rollInputHeld = downPressed && (leftPressed || rightPressed);
 
+    if (CanRoll() && rollInputHeld)
+    {
+        int direction = rightPressed ? 1 : -1;
+        StartRolling(direction);
+    }
 
+    if (isRolling)
+    {
+        rollTimer -= Time.deltaTime;
 
-        if (Input.GetKeyDown(KeyCode.Escape)) Application.Quit();
+        if (!rollInputHeld || rollTimer <= 0f)
+        {
+            StopRolling();
+        }
 
+        animator.SetBool("IsRolling", true);
+    }
+    else
+    {
+        animator.SetBool("IsRolling", false);
+    }
+
+    // ✅ Handle climbing input priority
+    bool isClimbInput = Mathf.Abs(vertical) > 0.1f;
+    isClimbing = canClimb && isClimbInput && !isRolling && !isAttacking;
+    animator.SetBool("IsClimbing", isClimbing);
+
+    // ❗Only update IsGrounded if NOT climbing
+    if (!isClimbing)
+    {
         animator.SetBool("IsGrounded", IsGrounded());
     }
+
+    // ❗Only update IsMoving if NOT climbing
+    if (!isClimbing)
+    {
+        animator.SetBool("IsMoving", Mathf.Abs(horizontal) > 0.1f);
+    }
+
+    if (Input.GetKeyDown(KeyCode.Escape)) Application.Quit();
+}
 
     private void FixedUpdate()
     {
@@ -233,6 +238,7 @@ else
         if (collision.CompareTag("Climb"))
         {
             canClimb = true;
+            
         }
     }
 
