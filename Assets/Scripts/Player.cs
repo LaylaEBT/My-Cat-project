@@ -25,10 +25,13 @@ public class Player : MonoBehaviour
     private float attackDuration = 0.5f;
     private float attackTimer = 0f;
 
-    private bool isRolling = false;                  // ✅ NEW
-    private float rollDuration = 0.6f;               // ✅ NEW
-    private float rollTimer = 0f;                    // ✅ NEW
-    private int rollDirection = 0;                   // ✅ NEW (-1 for left, 1 for right)
+    private bool isRolling = false;                  
+    private float rollDuration = 0.6f;               
+    private float rollTimer = 0f;                    
+    private int rollDirection = 0;                   //  (-1 for left, 1 for right)
+    private float lastHorizontalDirection = 1f;
+    private int jumpsRemaining;
+    public int maxJumps = 2;
 
     private void Start()
     {
@@ -64,6 +67,12 @@ public class Player : MonoBehaviour
             }
         }
 
+        if (IsGrounded() && !isRolling)
+        {
+            jumpsRemaining = maxJumps;
+        }
+
+
         // ✅ Trigger roll: Down + Left or Right
         // ✅ Handle rolling input: Must be holding Down + Left/Right
         bool downPressed = Input.GetKey(KeyCode.DownArrow);
@@ -97,6 +106,9 @@ else
     animator.SetBool("IsRolling", false);
 }
 
+   animator.SetBool("IsGrounded", IsGrounded());
+   //animator.SetBool("IsMoving", Mathf.Abs(horizontal) > 0.1f); FALSE
+
 
 
         if (Input.GetKeyDown(KeyCode.Escape)) Application.Quit();
@@ -124,14 +136,28 @@ else
         vertical = input.y;
 
         if (!isRolling) // ✅ Prevent flip override during roll
-            sr.flipX = horizontal < 0;
+         {
+        if (horizontal != 0f)
+        {
+            lastHorizontalDirection = horizontal;
+            sr.flipX = horizontal < 0f;
+        }
+        else
+        {
+            sr.flipX = lastHorizontalDirection < 0f; // Flip based on last direction
+        }
+    }
+
+        animator.SetBool("IsMoving", Mathf.Abs(horizontal) > 0.1f);
+
     }
 
     public void Jump(InputAction.CallbackContext context)
     {
-        if (context.performed && IsGrounded() && !isRolling)
+        if (context.performed && jumpsRemaining > 0 && !isRolling)
         {
             rb.linearVelocity = new Vector2(rb.linearVelocity.x, jumpingPower);
+            jumpsRemaining--;
         }
     }
 
@@ -157,13 +183,16 @@ else
 }
 
 
-private void StopRolling()
-{
-    if (!isRolling) return;
+    private void StopRolling()
+    {
+        if (!isRolling) return;
 
-    isRolling = false;
-    isAttacking = false;
-    animator.SetBool("IsRolling", false);
+        isRolling = false;
+        isAttacking = false;
+        
+        animator.SetBool("IsRolling", false);
+        animator.SetBool("IsMoving", false); // ✅ Also immediately clear IsMoving FALSE
+
 }
 
 
