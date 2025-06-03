@@ -163,11 +163,13 @@ else
 
     public void Attack(InputAction.CallbackContext context)
     {
+        //if (context.performed && IsGrounded() && !isRolling && !isAttacking)
         if (context.performed && IsGrounded() && !isRolling)
         {
             isAttacking = true;
             attackTimer = attackDuration;
             animator.SetTrigger("Attack");
+            Debug.Log("Attack triggered");
         }
     }
 
