@@ -65,21 +65,22 @@ public abstract class Enemy : MonoBehaviour
         return viewportPos.x > 0 && viewportPos.x < 1 && viewportPos.y > 0 && viewportPos.y < 1;
     }
 
-    protected virtual void OnTriggerEnter2D(Collider2D collision)
+    protected virtual void OnCollisionEnter2D(Collision2D collision)
     {
-        if (collision.CompareTag("Player"))
+        if (collision.collider.CompareTag("Player"))
         {
-            Player playerScript = collision.GetComponent<Player>();
+            Player playerScript = collision.collider.GetComponent<Player>();
             if (playerScript != null)
             {
                 if (playerScript.isAttacking)
                 {
-                    TakeDamage(1, collision.transform); 
+                    TakeDamage(1, playerScript.transform); 
+                    ApplyKnockback(playerScript.transform); 
                 }
                 else
                 {
                     playerScript.TakeDamage(damageAmount);
-                    ApplyKnockback(playerScript.transform); 
+                    playerScript.ApplyKnockback(transform);
                 }
             }
         }
@@ -89,7 +90,7 @@ public abstract class Enemy : MonoBehaviour
     protected virtual void TakeDamage(int amount, Transform attacker)
     {
         currentHealth -= amount;
-        animator.SetTrigger("Hurt");
+        //animator.SetTrigger("Hurt");
 
         ApplyKnockback(attacker);
 
@@ -107,7 +108,7 @@ public abstract class Enemy : MonoBehaviour
 
     protected virtual void Die()
     {
-        animator.SetTrigger("Die");
+        //animator.SetTrigger("Die");
         rb.linearVelocity = Vector2.zero;
         this.enabled = false;
         Destroy(gameObject, 1f); 

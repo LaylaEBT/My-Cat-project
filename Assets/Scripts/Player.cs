@@ -3,6 +3,7 @@ using UnityEngine.InputSystem;
 
 public class Player : MonoBehaviour
 {
+
     public float speed;
     public float jumpingPower;
     public LayerMask groundLayer;
@@ -25,7 +26,8 @@ public class Player : MonoBehaviour
     private float attackDuration = 0.5f;
     private float attackTimer = 0f;
 
-    private bool isRolling = false;                  
+    private bool isRolling  = false;
+                    
     private float rollDuration = 0.6f;               
     private float rollTimer = 0f;                    
     private int rollDirection = 0;                   //  (-1 for left, 1 for right)
@@ -43,10 +45,7 @@ public class Player : MonoBehaviour
         currentLives = maxLives;
     }
     
-    private bool CanRoll()
-{
-    return !isRolling && IsGrounded();
-}
+
 
     private void Update()
 {
@@ -85,21 +84,23 @@ public class Player : MonoBehaviour
         StartRolling(direction);
     }
 
-    if (isRolling)
-    {
-        rollTimer -= Time.deltaTime;
-
-        if (!rollInputHeld || rollTimer <= 0f)
+        if (isRolling)
         {
-            StopRolling();
-        }
+            rollTimer -= Time.deltaTime;
 
-        animator.SetBool("IsRolling", true);
-    }
-    else
-    {
-        animator.SetBool("IsRolling", false);
-    }
+            if (!rollInputHeld || rollTimer <= 0f)
+            {
+                StopRolling();
+            }
+
+            animator.SetBool("IsRolling", true);
+            isAttacking = true;
+        }
+        else
+        {
+            animator.SetBool("IsRolling", false);
+            isAttacking = false;
+        }
 
     // ✅ Handle climbing input priority
     bool isClimbInput = Mathf.Abs(vertical) > 0.1f;
@@ -112,10 +113,11 @@ public class Player : MonoBehaviour
         animator.SetBool("IsGrounded", IsGrounded());
     }
 
-    // ❗Only update IsMoving if NOT climbing
-    if (!isClimbing)
-    {
-        animator.SetBool("IsMoving", Mathf.Abs(horizontal) > 0.1f);
+        // ❗Only update IsMoving if NOT climbing
+        if (!isClimbing)
+        {
+            animator.SetBool("IsMoving", Mathf.Abs(horizontal) > 0.1f);
+            animator.SetBool("IsGrounded", IsGrounded()); //A CONFIRMER
     }
 
     if (Input.GetKeyDown(KeyCode.Escape)) Application.Quit();
@@ -125,7 +127,7 @@ public class Player : MonoBehaviour
     {
         if (isRolling)
         {
-            rb.linearVelocity = new Vector2(rollDirection * speed * 2f, rb.linearVelocity.y);  // ✅ Fast roll movement
+            rb.linearVelocity = new Vector2(rollDirection * speed * 3f, rb.linearVelocity.y);  // ✅ Fast roll movement
         }
         else
         {
@@ -183,7 +185,7 @@ public class Player : MonoBehaviour
     if (isRolling && rollDirection == direction) return;
 
     isRolling = true;
-    isAttacking = true;
+    isAttacking = true;//Useless, WHY?
     rollDirection = direction;
     sr.flipX = direction == -1;
     animator.SetBool("IsRolling", true);
@@ -195,15 +197,20 @@ public class Player : MonoBehaviour
         if (!isRolling) return;
 
         isRolling = false;
-        isAttacking = false;
-        
+        isAttacking = false; //Useless, WHY?
+
         animator.SetBool("IsRolling", false);
-        animator.SetBool("IsMoving", false); // ✅ Also immediately clear IsMoving FALSE
+        animator.SetBool("IsMoving", false); // Stop rolling without movement
 
-}
+    }
+
+        private bool CanRoll() 
+    {
+    return !isRolling && IsGrounded();
+    }
 
 
-    bool IsGrounded()
+    private bool IsGrounded()
     {
         return Physics2D.OverlapCircle(groundCheck.position, 0.8f, groundLayer);
     }
@@ -213,12 +220,12 @@ public class Player : MonoBehaviour
         if (isAttacking) return;
 
         currentLives -= amount;
-        animator.SetTrigger("Hurt");
-        ApplyKnockback();
+        //animator.SetTrigger("Hurt");
+        //ApplyKnockback(); TO PUT BACK LATER
 
         if (currentLives <= 0)
         {
-            animator.SetTrigger("Die");
+            //animator.SetTrigger("Die");
             Debug.Log("Player died");
         }
         else
@@ -227,9 +234,9 @@ public class Player : MonoBehaviour
         }
     }
 
-    private void ApplyKnockback()
+    public void ApplyKnockback(Transform attacker)
     {
-        Vector2 knockDir = (transform.position - Camera.main.transform.position).normalized;
+        Vector2 knockDir = (transform.position - attacker.position).normalized;
         rb.AddForce(knockDir * 5f, ForceMode2D.Impulse);
     }
 
