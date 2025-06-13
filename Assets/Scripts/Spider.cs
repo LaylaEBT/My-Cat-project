@@ -1,6 +1,7 @@
-using UnityEngine;
-
 public class Spider : Enemy
+
 {
-    // Inherits everything from base
+
+    // Inherits everything from base
+
 }
