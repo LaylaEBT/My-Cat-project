@@ -37,6 +37,8 @@ public class Player : MonoBehaviour
     public float knockbackForce = 5f; 
 
     private bool isClimbing = false; 
+    public GameObject[] lifeIcons;
+    public GameObject gameOverMenu;
 
     private void Start()
     {
@@ -266,7 +268,7 @@ public class Player : MonoBehaviour
 
     private bool IsGrounded()
     {
-        return Physics2D.OverlapCircle(groundCheck.position, 0.2f, groundLayer);
+        return Physics2D.OverlapCircle(groundCheck.position, 0.8f, groundLayer);
     }
 
     public void TakeDamage(int amount, Transform attacker)
@@ -290,16 +292,26 @@ public class Player : MonoBehaviour
 
         currentLives -= amount;
         Debug.Log($"Player took {amount} damage from {attacker.name}. Lives left: {currentLives}");
-        animator.SetTrigger("Hurt"); 
         
-        ApplyKnockback(attacker); 
+        
+        ApplyKnockback(attacker);
+        UpdateUI(); 
 
         if (currentLives <= 0)
         {
-            animator.SetTrigger("Die"); 
+            //animator.SetTrigger("Die");
             Debug.Log("Player event: Died.");
-            this.enabled = false; 
-            rb.linearVelocity = Vector2.zero;
+            Time.timeScale = 0f; // Pause the game
+            gameOverMenu.SetActive(true);
+        }
+    }
+    void UpdateUI()
+    {
+        
+        // Update life icons
+        for (int i = 0; i < lifeIcons.Length; i++)
+        {
+            lifeIcons[i].SetActive(i < currentLives);
         }
     }
 
@@ -317,14 +329,16 @@ public class Player : MonoBehaviour
         rb.linearVelocity = Vector2.zero; 
         rb.AddForce(direction * knockbackForce, ForceMode2D.Impulse); // knockDir is already normalized in effect if directionX is -1 or 1
         Debug.Log($"[KNOCKBACK DEBUG] ApplyKnockback: Applied force knockbackForce(knockDir:, knockbackForce: {knockbackForce}). Player Velocity AFTER: {rb.linearVelocity}");*/
-                Debug.Log($"[KNOCKBACK DEBUG] Player.ApplyKnockback from {attacker.name}. Player Velocity BEFORE: {rb.linearVelocity}");
+        Debug.Log($"[KNOCKBACK DEBUG] Player.ApplyKnockback from {attacker.name}. Player Velocity BEFORE: {rb.linearVelocity}");
 
-        if (attacker == null) {
+        if (attacker == null)
+        {
             Debug.LogError("[KNOCKBACK DEBUG] Player.ApplyKnockback: Attacker transform is null! Cannot apply knockback.");
             return;
         }
-        if (rb == null) {
-             Debug.LogError("[KNOCKBACK DEBUG] Player.ApplyKnockback: Rigidbody2D is null! Cannot apply knockback.");
+        if (rb == null)
+        {
+            Debug.LogError("[KNOCKBACK DEBUG] Player.ApplyKnockback: Rigidbody2D is null! Cannot apply knockback.");
             return;
         }
 
@@ -333,17 +347,18 @@ public class Player : MonoBehaviour
         if (Mathf.Approximately(transform.position.x, attacker.position.x))
         {
             // If attacker is directly above/below or at same X, use last faced direction to knock away
-            horizontalDirection = -lastHorizontalDirection; 
+            horizontalDirection = -lastHorizontalDirection;
             if (Mathf.Approximately(horizontalDirection, 0f)) horizontalDirection = 1f; // Default to right if lastHorizontalDirection was somehow 0
         }
         else
         {
             horizontalDirection = Mathf.Sign(transform.position.x - attacker.position.x);
         }
-        
+
         // Ensure horizontalDirection is definitively -1 or 1
-        if (Mathf.Approximately(horizontalDirection, 0f)) { 
-             horizontalDirection = 1f; // Fallback if all else fails, knock to the right
+        if (Mathf.Approximately(horizontalDirection, 0f))
+        {
+            horizontalDirection = 1f; // Fallback if all else fails, knock to the right
         }
 
         // Create a purely horizontal knockback vector
@@ -352,7 +367,7 @@ public class Player : MonoBehaviour
 
         rb.linearVelocity = Vector2.zero; // Clear current velocity for consistent knockback
         rb.AddForce(knockDir * knockbackForce, ForceMode2D.Impulse);
-        
+
         Debug.Log($"[KNOCKBACK DEBUG] Player.ApplyKnockback: Applied force {knockDir * knockbackForce} (knockDir: {knockDir}, knockbackForce (from Inspector): {this.knockbackForce}). Player Velocity AFTER: {rb.linearVelocity}");
     }
 
@@ -362,13 +377,20 @@ public class Player : MonoBehaviour
         {
             canClimb = true;
         }
+        else if (collision.CompareTag("Death"))
+        {
+           Time.timeScale = 0f; // Pause the game
+            gameOverMenu.SetActive(true); 
+        }
+        
     }
 
-    private void OnTriggerExit2D(Collider2D collision)
-    {
-        if (collision.CompareTag("Climb"))
-        {
-            canClimb = false;
-        }
+
+            private void OnTriggerExit2D(Collider2D collision)
+            {
+                if (collision.CompareTag("Climb"))
+                {
+                    canClimb = false;
+                }
+            }
     }
-}
