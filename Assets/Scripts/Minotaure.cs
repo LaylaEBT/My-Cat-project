@@ -5,6 +5,8 @@ public class Minotaur : Enemy
     [Header("Minotaur Specifics")]
     public float attackRange = 2.0f;
 
+    public GameObject VictoryMenu;
+
     private static readonly int IsAttackingHash = Animator.StringToHash("IsAttacking");
 
     protected override void Start()
@@ -15,7 +17,28 @@ public class Minotaur : Enemy
         damageAmount = 3;
     }
 
-    // [UPDATED] The Move method is changed to allow movement during the attack animation.
+    protected override void Die()
+    {
+        Debug.Log($"Enemy '{gameObject.name}' died.");
+
+        
+        Time.timeScale = 0f;
+        VictoryMenu.SetActive(true);
+        
+
+        // The rest of the Die() method logic from the base class remains.
+        rb.linearVelocity = Vector2.zero;
+        rb.isKinematic = true;
+        Collider2D[] colliders = GetComponents<Collider2D>();
+        foreach (Collider2D col in colliders) col.enabled = false;
+        
+        // IMPORTANT: We disable the script but don't destroy the object immediately,
+        // so the death animation can play out while the victory menu is shown.
+        //this.enabled = false;
+        
+        
+        //Destroy(gameObject, 1f);  Cannot destroy, victory menu tied to it
+    }
     protected override void Move()
     {
         // First, perform the basic checks from the base class.

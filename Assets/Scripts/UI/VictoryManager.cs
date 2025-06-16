@@ -3,27 +3,69 @@ using UnityEngine.SceneManagement; // Required for loading scenes!
 
 public class VictoryManager : MonoBehaviour
 {
-    [Header("UI Elements")]
-    public GameObject victoryMenu; // Assign your VictoryMenu panel to this in the Inspector.
+    [Header("Audio")]
+    
+    public AudioSource sfxSource;       // Reference to the sound effects AudioSource
+    public AudioClip gameOverSound; 
+    public GameObject VictoryMenu;
+         
+    
+    public GameObject player;
 
-    // A method to show the victory menu
-    public void ShowVictoryMenu()
+    void Start()
     {
-        if (victoryMenu != null)
+        
+        if (VictoryMenu)
+            VictoryMenu.SetActive(false);
+
+    }
+
+    public void TriggerVictoryMenu()
+    {
+        /*if (AudioManager.Instance != null && AudioManager.Instance.musicSource != null)
+        AudioManager.Instance.musicSource.Stop();*/
+        Debug.Log("TriggerGameOver called");
+    
+        if (AudioManager.Instance == null)
         {
-            victoryMenu.SetActive(true);
-            Time.timeScale = 0f; // Optional: Pauses the game by stopping time.
+          Debug.LogError("AudioManager.Instance is NULL!");
         }
         else
         {
-            Debug.LogError("Victory Menu is not assigned in the UIManager!");
+           Debug.Log("AudioManager.Instance found");
+
+        if (AudioManager.Instance.musicSource == null)
+        {
+            Debug.LogError("musicSource is NULL inside AudioManager!");
+        }
+        else
+        {
+            Debug.Log("musicSource found, stopping music now...");
+            AudioManager.Instance.musicSource.Stop();
         }
     }
 
-    // This public method will be called by our button's OnClick event
+    // Play Game Over Sound
+        if (sfxSource != null && gameOverSound != null)
+        {
+            sfxSource.PlayOneShot(gameOverSound);
+        }
+
+
+    
+        Time.timeScale = 0f; // Pause the game
+        VictoryMenu.SetActive(true);
+    }
+
+
     public void GoToMainMenu()
     {
-        Time.timeScale = 1f; // IMPORTANT: Un-pause the game before leaving the scene.
-        SceneManager.LoadScene("Menu"); // IMPORTANT: Replace "MainMenu" with the exact name of your main menu scene file.
+        Time.timeScale = 1f;
+        SceneManager.LoadScene("Menu");
+    }
+
+    public void ExitGame()
+    {
+        Application.Quit();
     }
 }
