@@ -150,6 +150,19 @@ public class Player : MonoBehaviour
 
         if (Input.GetKeyDown(KeyCode.Escape)) Application.Quit();
     }
+    
+    public void Roll(InputAction.CallbackContext context)
+{
+    if (context.performed && CanRoll() && !isClimbing)
+    {
+        // Determine roll direction from the horizontal input axis
+        int direction = (int)Mathf.Sign(horizontal);
+        if (direction != 0)
+        {
+            StartRolling(direction);
+        }
+    }
+}
 
     private void FixedUpdate()
     {
@@ -167,14 +180,14 @@ public class Player : MonoBehaviour
         }
         else if (isClimbing)
         {
-            rb.gravityScale = 0f; 
-            float climbVerticalVelocity = vertical * speed; 
+            rb.gravityScale = 0f;
+            float climbVerticalVelocity = vertical * speed;
             float climbHorizontalVelocity = horizontal * speed * 0.75f;
             rb.linearVelocity = new Vector2(climbHorizontalVelocity, climbVerticalVelocity);
         }
         else // Normal movement (not rolling, not climbing, and potentially not rooted by attack)
         {
-            rb.gravityScale = 1f; 
+            rb.gravityScale = 1f;
             rb.linearVelocity = new Vector2(horizontal * speed, rb.linearVelocity.y);
         }
     }

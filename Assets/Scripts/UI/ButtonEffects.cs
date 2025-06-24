@@ -7,7 +7,7 @@ public class ButtonEffects : MonoBehaviour
 
     public void OnHoverEnter()
     {
-        transform.localScale = Vector3.one * 1.1f; // Make it bigger
+        transform.localScale = Vector3.one * 1.5f; // Make it bigger
         if (hoverSound != null)
             hoverSound.Play(); // Play hover sound
     }

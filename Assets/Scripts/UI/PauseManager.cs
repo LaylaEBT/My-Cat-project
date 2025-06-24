@@ -1,12 +1,20 @@
 using UnityEngine;
 using UnityEngine.SceneManagement;
+using UnityEngine.EventSystems;
+using UnityEngine.InputSystem;
 
 public class PauseManager : MonoBehaviour
 {
     public GameObject pauseMenu;
     public GameObject settingsPanel;
 
+    public PlayerInput playerInput;
+    public GameObject pauseFirstButton;
+
     private bool isPaused = false;
+   
+
+
 
     void Update()
     {
@@ -19,22 +27,44 @@ public class PauseManager : MonoBehaviour
         }
     }
 
+    //void OnEnable()
+//{
+    //EventSystem.current.SetSelectedGameObject(firstSelectedButton);
+//}
+
     public void TogglePause()
     {
         isPaused = !isPaused;
-        pauseMenu.SetActive(isPaused);
-        Time.timeScale = isPaused ? 0f : 1f;
 
-        if (!isPaused)
-            settingsPanel.SetActive(false);
+        if (isPaused)
+        {
+            // PAUSE THE GAME
+            Time.timeScale = 0f;
+            pauseMenu.SetActive(true);
+            playerInput.SwitchCurrentActionMap("UI"); // Switch to UI controls
+            
+            // Clear any old selection and set the new one
+            EventSystem.current.SetSelectedGameObject(null);
+            EventSystem.current.SetSelectedGameObject(pauseFirstButton);
+        }
+        else
+        {
+            // RESUME THE GAME
+            Time.timeScale = 1f;
+            pauseMenu.SetActive(false);
+            settingsPanel.SetActive(false); // Also close settings on resume
+            playerInput.SwitchCurrentActionMap("Player"); // Switch back to Gameplay controls
+        }
     }
+    
 
     public void ResumeGame()
-    {
-        isPaused = false;
-        pauseMenu.SetActive(false);
-        settingsPanel.SetActive(false);
-        Time.timeScale = 1f;
+   {
+    /*isPaused = false;
+    pauseMenu.SetActive(false);
+    settingsPanel.SetActive(false);
+    Time.timeScale = 1f;*/
+    TogglePause();
     }
 
     public void OpenSettings()
@@ -50,8 +80,9 @@ public class PauseManager : MonoBehaviour
     }
 
     public void ExitToMainMenu()
-    {
-        Time.timeScale = 1f;
-        SceneManager.LoadScene("Menu");
-    }
+{
+    Time.timeScale = 1f;
+    playerInput.SwitchCurrentActionMap("Player");
+    SceneManager.LoadScene("Menu");
+}
 }
